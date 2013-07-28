@@ -1,0 +1,11 @@
+# Eclipse files #
+#################
+
+.project
+.settings/*
+
+# Apple OS files #
+##################
+
+*.DS_Store
+
