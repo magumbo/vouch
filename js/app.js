@@ -6,6 +6,20 @@ App.Router.map(function() {
 	 this.route("user", { path: "/user" });
 });
 
+App.serverResponse = Ember.Object.extend({
+  say: function(thing) {
+    var name = this.get('name');
+
+    return [name + " says: " + thing];
+  }
+});
+
+var sR = App.serverResponse.create({
+  message: null,
+  userJSON: null
+});
+
+
 App.IndexRoute = Ember.Route.extend({
   model: function() {
     return ['red', 'yellow', 'blue'];
@@ -13,12 +27,9 @@ App.IndexRoute = Ember.Route.extend({
 });
 
 App.UserRoute = Ember.Route.extend({
-  model: function() {
-    return ['test','test2'];
-  }
+  model: function(){ return sR;}
 });
 
-App.User = Ember.Object.extend();
 App.Item = Ember.Object.extend();
 
 function updateUser(test){
@@ -35,7 +46,7 @@ App.UserController = Ember.ObjectController.extend({
 		  type: "GET",
 		  url: 'http://localhost:3000/users',
 	//	  data: data,
-		  success: function(data){alert(data);},
+		  success: function(data){sR.set('message', data)},
 		  error: function(test, fail){alert(JSON.stringify(fail));}
 		 // dataType: 'json'
 		});
@@ -45,7 +56,7 @@ App.UserController = Ember.ObjectController.extend({
 			  type: "POST",
 			  url: 'http://localhost:3000/users',
 		//	  data: data,
-			  success: function(data){alert(data);},
+			  success: function(data){sR.set('message', data);},
 			  error: function(test, fail){alert(JSON.stringify(fail));}
 			 // dataType: 'json'
 	    });
@@ -56,7 +67,7 @@ App.UserController = Ember.ObjectController.extend({
 			  type: "PUT",
 			  url: 'http://localhost:3000/users',
 		//	  data: data,
-			  success: function(data){alert(data);},
+			  success: function(data){sR.set('message', data);},
 			  error: function(test, fail){alert(JSON.stringify(fail));}
 			 // dataType: 'json'
 			});
@@ -66,7 +77,7 @@ App.UserController = Ember.ObjectController.extend({
 		  type: "DELETE",
 		  url: 'http://localhost:3000/users',
 	//	  data: data,
-		  success: function(data){alert(data);},
+		  success: function(data){sR.set('message', data);},
 		  error: function(test, fail){alert(JSON.stringify(fail));}
 		 // dataType: 'json'
 		});
@@ -74,6 +85,11 @@ App.UserController = Ember.ObjectController.extend({
 
 });
 
+var retval = 'testing ret vla';
+
+function chtest(){
+	return retval;
+}
 
 
 
@@ -84,14 +100,14 @@ App.ClickableView = Ember.View.extend({
 		  url: 'http://localhost:3000/users',
 	//	  data: data,
 		  success: function(data){alert(data);},
-		  error: function(test, fail){alert(JSON.stringify(fail))}
+		  error: function(test, fail){alert(JSON.stringify(fail));}
 		 // dataType: 'json'
 		});
   }
 });
 
 App.Controller = Ember.ObjectController.extend({
-  headerName: 'Vouch!',
+  headerName: chtest() ,
   dispState:"None",
   appVersion:  2.1
 });

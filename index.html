@@ -2,11 +2,19 @@
 <html>
 <head>
 <meta charset="utf-8">
-<title>Ember Starter Kit</title>
+<title>Vouch Carl test</title>
   <link rel="stylesheet" href="css/normalize.css">
   <link rel="stylesheet" href="css/style.css">
+  
+   <STYLE type="text/css">
+  a.active {text-decoration:none; font-weight:bold;text-transform:uppercase;}
+ </STYLE>
+ 
+ 
 </head>
 <body>
+
+
 
   <script type="text/x-handlebars" data-template-name="application">
     <h2>{{headerName}}</h2>
@@ -26,8 +34,17 @@
 <button {{action 'postUsers'}}>POST</button>
 <button {{action 'putUsers'}}>PUT</button>
 <button {{action 'delUsers'}}>DEL</button>
+<p>
+{{model.message}}
+</p>
 
+<p>
+{{model.userJSON}}
+</p>
 
+<p>
+{{view Ember.TextArea valueBinding="model.userJSON"}}
+</p>
 
   </script>
   
