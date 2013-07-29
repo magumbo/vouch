@@ -44,7 +44,7 @@ App.UserController = Ember.ObjectController.extend({
 	  getUsers: function(evt) {
 	$.ajax({
 		  type: "GET",
-		  url: 'http://localhost:3000/users',
+		  url: 'http://localhost/api/v0/users',
 	//	  data: data,
 		  success: function(data){sR.set('message', data)},
 		  error: function(test, fail){alert(JSON.stringify(fail));}
@@ -52,20 +52,24 @@ App.UserController = Ember.ObjectController.extend({
 		});
   }	,
   postUsers: function(evt) {
+      var dataP = {"payload" : JSON.parse(sR.userJSON)};
+	  
+
+
 		$.ajax({
 			  type: "POST",
-			  url: 'http://localhost:3000/users',
-		//	  data: data,
+			  url: 'http://localhost/api/v0/users',
+			  data: dataP,
 			  success: function(data){sR.set('message', data);},
-			  error: function(test, fail){alert(JSON.stringify(fail));}
-			 // dataType: 'json'
+			  error: function(test, fail){alert(JSON.stringify(fail));},
+			  //dataType: 'json'
 	    });
 	  },
   
   putUsers: function(evt) {
 		$.ajax({
 			  type: "PUT",
-			  url: 'http://localhost:3000/users',
+			  url: 'http://localhost/api/v0/users',
 		//	  data: data,
 			  success: function(data){sR.set('message', data);},
 			  error: function(test, fail){alert(JSON.stringify(fail));}
@@ -75,7 +79,7 @@ App.UserController = Ember.ObjectController.extend({
   delUsers: function(evt) {
 		$.ajax({
 		  type: "DELETE",
-		  url: 'http://localhost:3000/users',
+		  url: 'http://localhost/api/v0/users',
 	//	  data: data,
 		  success: function(data){sR.set('message', data);},
 		  error: function(test, fail){alert(JSON.stringify(fail));}
@@ -97,7 +101,7 @@ App.ClickableView = Ember.View.extend({
   click: function(evt) {
 	$.ajax({
 		  type: "DELETE",
-		  url: 'http://localhost:3000/users',
+		  url: 'http://localhost/api/v0/users',
 	//	  data: data,
 		  success: function(data){alert(data);},
 		  error: function(test, fail){alert(JSON.stringify(fail));}
