@@ -4,6 +4,7 @@ App.Router.map(function() {
   // put your routes here
 	 this.route("about", { path: "/about" });
 	 this.route("user", { path: "/user" });
+	 this.route("login", { path: "/login" });
 });
 
 App.serverResponse = Ember.Object.extend({
@@ -19,6 +20,12 @@ var sR = App.serverResponse.create({
   userJSON: null
 });
 
+var loginInfo = App.serverResponse.create({
+	message: 'no messages sent yet',
+	username: null,
+	password:null
+});
+
 
 App.IndexRoute = Ember.Route.extend({
   model: function() {
@@ -29,6 +36,11 @@ App.IndexRoute = Ember.Route.extend({
 App.UserRoute = Ember.Route.extend({
   model: function(){ return sR;}
 });
+
+App.LoginRoute = Ember.Route.extend({
+  model: function(){ return loginInfo;}
+});
+
 
 App.Item = Ember.Object.extend();
 
@@ -53,15 +65,12 @@ App.UserController = Ember.ObjectController.extend({
   }	,
   postUsers: function(evt) {
       var dataP = {"payload" : JSON.parse(sR.userJSON)};
-	  
-
-
 		$.ajax({
 			  type: "POST",
 			  url: '/api/v0/users',
 			  data: dataP,
 			  success: function(data){sR.set('message', data);},
-			  error: function(test, fail){alert(JSON.stringify(fail));},
+			  error: function(test, fail){alert(JSON.stringify(fail));}
 			  //dataType: 'json'
 	    });
 	  },
@@ -95,8 +104,6 @@ function chtest(){
 	return retval;
 }
 
-
-
 App.ClickableView = Ember.View.extend({
   click: function(evt) {
 	$.ajax({
@@ -114,5 +121,46 @@ App.Controller = Ember.ObjectController.extend({
   headerName: chtest() ,
   dispState:"None",
   appVersion:  2.1
+});
+
+
+/*
+ * New login (session) stuff
+ */
+
+
+App.LoginController = Ember.ObjectController.extend({	
+	  get: function(evt) {
+	$.ajax({
+		  type: "GET",
+		  url: '/api/v0/session',
+	//	  data: data,
+		  success: function(data){loginInfo.set('message', data)},
+		  error: function(test, fail){alert(JSON.stringify(fail));}
+		 // dataType: 'json'
+		});
+  }	,
+
+  post: function(evt) {
+		$.ajax({
+			  type: "POST",
+			  url: '/api/v0/session',
+			  data: 	"username=" +  loginInfo.username + "&password=" + loginInfo .password,
+			  success: function(data){loginInfo.set('message', data);},
+			  error: function(test, fail){alert(JSON.stringify(fail));}
+			 // dataType: 'json'
+			});
+	  },
+  del: function(evt) {
+		$.ajax({
+		  type: "DELETE",
+		  url: '/api/v0/session',
+	//	  data: data,
+		  success: function(data){loginInfo.set('message', data);},
+		  error: function(test, fail){alert(JSON.stringify(fail));}
+		 // dataType: 'json'
+		});
+	  }
+
 });
 

@@ -21,6 +21,7 @@
  {{#linkTo 'about'}}About{{/linkTo}}
  {{#linkTo 'index'}}Home{{/linkTo}}
  {{#linkTo 'user'}}user{{/linkTo}}
+ {{#linkTo 'login'}}Login Controller{{/linkTo}}
     {{outlet}}
   </script>
 
@@ -48,6 +49,28 @@
 
   </script>
   
+  
+  
+ <script type="text/x-handlebars" data-template-name="login">
+<h1>Login</h1>
+<p><b>Status: </b>{{model.message}}</p>
+<h2>Actions</h2>
+<hr>
+<button {{action 'get'}}>Get login status</button>
+<hr>
+<ul>
+<li>username:{{username}}</li>
+<li>password:{{password}}</li>
+</ul>
+<ul>
+<li>{{view Ember.TextField valueBinding="model.username"}}</li>
+<li>{{view Ember.TextField valueBinding="model.password"}}</li>
+</ul>
+<button {{action 'post'}}>Login now</button>
+<hr>
+<button {{action 'del'}}>Logout</button>
+<hr>
+  </script>
 
   <script src="js/libs/jquery-1.9.1.js"></script>
   <script src="js/libs/handlebars-1.0.0-rc.4.js"></script>
