@@ -1,5 +1,7 @@
+//Command to instantiate root ember object
 App = Ember.Application.create();
 
+//Setup Ember routes,  connecting URLs to code
 App.Router.map(function() {
   // put your routes here
 	 this.route("about", { path: "/about" });
@@ -7,43 +9,43 @@ App.Router.map(function() {
 	 this.route("login", { path: "/login" });
 });
 
-App.serverResponse = Ember.Object.extend({
-  say: function(thing) {
-    var name = this.get('name');
+//Prototype data object, used in place of ember data
+App.serverResponse = Ember.Object.extend({});
 
-    return [name + " says: " + thing];
-  }
-});
-
+//Object created by prototype for user view
 var sR = App.serverResponse.create({
   message: null,
   userJSON: null
 });
 
+//Object created by prototype for login view
 var loginInfo = App.serverResponse.create({
 	message: 'no messages sent yet',
 	username: null,
 	password:null
 });
 
-
+//Route code for Index route (from tutorial), you can access this data on the index page with {{model}}
 App.IndexRoute = Ember.Route.extend({
   model: function() {
     return ['red', 'yellow', 'blue'];
   }
 });
 
+//Route code for user view
 App.UserRoute = Ember.Route.extend({
   model: function(){ return sR;}
 });
 
+//Route code for login page
 App.LoginRoute = Ember.Route.extend({
   model: function(){ return loginInfo;}
 });
 
-
+//???
 App.Item = Ember.Object.extend();
 
+//Test function shows how to add methods onto an already defined route with "reopen"
 function updateUser(test){
   App.UserRoute.reopen({
     model: function() {
@@ -52,6 +54,7 @@ function updateUser(test){
   });
 }
 
+//Controller has methods that are executed on user view
 App.UserController = Ember.ObjectController.extend({	
 	  getUsers: function(evt) {
 	$.ajax({
@@ -98,37 +101,7 @@ App.UserController = Ember.ObjectController.extend({
 
 });
 
-var retval = 'testing ret vla';
-
-function chtest(){
-	return retval;
-}
-
-App.ClickableView = Ember.View.extend({
-  click: function(evt) {
-	$.ajax({
-		  type: "DELETE",
-		  url: '/api/v0/users',
-	//	  data: data,
-		  success: function(data){alert(data);},
-		  error: function(test, fail){alert(JSON.stringify(fail));}
-		 // dataType: 'json'
-		});
-  }
-});
-
-App.Controller = Ember.ObjectController.extend({
-  headerName: chtest() ,
-  dispState:"None",
-  appVersion:  2.1
-});
-
-
-/*
- * New login (session) stuff
- */
-
-
+//Controller has methods that are executed on login view
 App.LoginController = Ember.ObjectController.extend({	
 	  get: function(evt) {
 	$.ajax({
