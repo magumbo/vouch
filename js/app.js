@@ -11,6 +11,12 @@ App.Router.map(function() {
 
 //Prototype data object, used in place of ember data
 App.serverResponse = Ember.Object.extend({});
+App.sessionModel = Ember.Object.extend({
+	serverResponse:null,
+	username:null,
+	password:null
+});
+
 
 //Object created by prototype for user view
 var sR = App.serverResponse.create({
@@ -19,11 +25,7 @@ var sR = App.serverResponse.create({
 });
 
 //Object created by prototype for login view
-var loginInfo = App.serverResponse.create({
-	message: 'no messages sent yet',
-	username: null,
-	password:null
-});
+var loginData = App.sessionModel.create({});
 
 //Route code for Index route (from tutorial), you can access this data on the index page with {{model}}
 App.IndexRoute = Ember.Route.extend({
@@ -39,7 +41,7 @@ App.UserRoute = Ember.Route.extend({
 
 //Route code for login page
 App.LoginRoute = Ember.Route.extend({
-  model: function(){ return loginInfo;}
+  model: function(){ return loginData;}
 });
 
 //???
@@ -103,35 +105,39 @@ App.UserController = Ember.ObjectController.extend({
 
 //Controller has methods that are executed on login view
 App.LoginController = Ember.ObjectController.extend({	
+
 	  get: function(evt) {
 	$.ajax({
 		  type: "GET",
 		  url: '/api/v0/session',
-	//	  data: data,
-		  success: function(data){loginInfo.set('message', data)},
+		  success: function(data){loginData.set('serverResponse', data.message)},
 		  error: function(test, fail){alert(JSON.stringify(fail));}
 		 // dataType: 'json'
 		});
   }	,
-
   post: function(evt) {
+	 
 		$.ajax({
 			  type: "POST",
 			  url: '/api/v0/session',
-			  data: 	"username=" +  loginInfo.username + "&password=" + loginInfo .password,
-			  success: function(data){loginInfo.set('message', data);},
-			  error: function(test, fail){alert(JSON.stringify(fail));}
-			 // dataType: 'json'
+			  data: 	{username : loginData.username, password : loginData.password},
+			  success: function(data){loginData.set('serverResponse', data.message);},
+			 // success: function(data){console.log(data);},
+			  
+			  error: function(data){loginData.set('serverResponse', JSON.parse(data.responseText).message);},
+			  dataType: 'json'
 			});
+	 // loginData.set('serverResponse', JSON.stringify({username:loginData.username, password: loginData.password}));
+			
+
 	  },
   del: function(evt) {
 		$.ajax({
 		  type: "DELETE",
 		  url: '/api/v0/session',
-	//	  data: data,
-		  success: function(data){loginInfo.set('message', data);},
-		  error: function(test, fail){alert(JSON.stringify(fail));}
-		 // dataType: 'json'
+		  success: function(data){loginData.set('serverResponse', data.message);},
+		  error: function(test, fail){alert(JSON.stringify(fail));},
+		  dataType: 'json'
 		});
 	  }
 
