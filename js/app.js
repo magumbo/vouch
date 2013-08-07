@@ -23,7 +23,8 @@ App.userModel = Ember.Object.extend({
 	currentUserId:null,
 	username:null,
 	password:null,
-	userQuery:null
+	userQuery:null,
+	returnedUserData:null
 });
 
 
@@ -57,7 +58,7 @@ App.LoginRoute = Ember.Route.extend({
 App.userCollectionController = Ember.ArrayController.create();
 
 //Controller has methods that are executed on user view
-App.UserController = Ember.ObjectController.extend({	
+App.UserController = Ember.ObjectController.extend({
   get: function(evt) {
 	$.ajax({
 		  type: "GET",
@@ -70,6 +71,28 @@ App.UserController = Ember.ObjectController.extend({
 		  error: function(e){userData.set('serverResponse', JSON.parse(e.responseText).message);}
 		});
   },	
+  
+ getSingle: function(evt) {
+	$.ajax({
+		  type: "GET",
+		  url: '/api/v0/users/' + userData.userId, 
+		  data: userData.userQuery,
+		  success: function(data){
+			console.log(data);
+			userData.set('serverResponse', data.message);
+			userData.set('returnedUserData', JSON.stringify(data.user));
+		  },
+		  //error: function(e){userData.set('serverResponse', JSON.parse(e.responseText).message);}
+		  error: function(e){console.log(e);},
+		  dataType: 'json'
+		});
+  },	  
+	
+	
+	
+	
+	
+	
   /*
    * 
    * NOTE: This method uses the session resource, not the uesr resource in the URL
@@ -81,6 +104,7 @@ App.UserController = Ember.ObjectController.extend({
 		  url: '/api/v0/session', 
 		  success: function(data){
 			userData.set('currentUserId', data.userID);
+			userData.set('userId', data.userId);
 			userData.set('serverResponse', 'current user is:' + data.userId);
 		  },
 		  error: function(e){userData.set('serverResponse', JSON.parse(e.responseText).message);},
@@ -93,7 +117,11 @@ App.UserController = Ember.ObjectController.extend({
 			  type: "POST",
 			  url: '/api/v0/users',
 			  data: {username : userData.username, password: userData.password},
-			  success: function(data){userData.set('serverResponse', data.message);},
+			  success: function(data){
+				  userData.set('serverResponse', data.message);
+				  userData.set('userQuery', '_id=' + data.userId);
+				  userData.set('userId', data.userId);
+			  },
 			  error: function(e){userData.set('serverResponse', JSON.parse(e.responseText).message);},
 			  dataType: 'json'
 	    });
