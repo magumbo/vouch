@@ -23,13 +23,9 @@
 
   <body>
 
-  
 
-	
-	
-	
-	
-
+=======
+<!-- Main template -->
 <script type="text/x-handlebars" data-template-name="application">
 
 	
@@ -103,35 +99,58 @@
 
 </script>
 
+<!-- Default view -->
 <script type="text/x-handlebars" data-template-name="index">
 </script>
   
+<!-- User view -->
 <script type="text/x-handlebars" data-template-name="user">
-<h2>Users actions</h2>
-<button {{action 'getUsers'}}>GET</button>
-<button {{action 'postUsers'}}>POST</button>
-<button {{action 'putUsers'}}>PUT</button>
-<button {{action 'delUsers'}}>DEL</button>
+<h1>Users</h1>
+<p><b>Status: </b>{{model.serverResponse}}</p>
+<h2>Actions</h2>
+<hr>
 <p>
-{{model.message}}
-</p>
-
-<p>
-{{model.userJSON}}
-</p>
-
-<p>
-{{view Ember.TextArea valueBinding="model.userJSON"}}
-</p>
+<button {{action 'getCurrentUserId'}}>Get current user id</button>
+Note this function uses the session resource, not the user resource</p>
+<hr>
+<h2>Get json for user</h2>
+{{view Ember.TextField valueBinding="model.userId"}}
+<br>
+<button {{action 'getSingle'}}>Get user JSON</button>
+<br>
+{{model.returnedUserData}}
+<hr>
+<h3>Create a user</h3>
+<ul>
+<li>{{view Ember.TextField valueBinding="model.username"}}</li>
+<li>{{view Ember.TextField valueBinding="model.password"}}</li>
+</ul>
+<button {{action 'postUsers'}}>Create User</button>
+<hr>
+<ul>
+<lh>Example queries</lh>
+<li>_id=51f809885de4c30000000005</li>
+<li>username=c3@carlz.com</li>
+<li>_id=51f809885de4c30000000005&username=c3@carlz.com</li>
+<li>username=*@example.com</li>
+<li>Note wildcard doesn't work on _id</li>
+</ul>
+{{view Ember.TextField valueBinding="model.userQuery"}}
+<br>
+<button {{action 'get'}}>Get all users available to this user</button>
+<br>
+<h3>Results</h3>
+<ul>
+{{#each App.userCollectionController}}
+ <li>id:{{_id}}, username:{{username}} </li>
+{{/each}}
+</ul>
+<hr>
 </script>
   
-  <!-- 
-
-
-
   
-   -->
   
+ <!-- Login view -->
  <script type="text/x-handlebars" data-template-name="login">
  
 
@@ -170,6 +189,12 @@
 <button {{action 'del'}}>Logout</button>
 <hr>
 </script>
+
+
+
+
+
+
 
     <script src="js/libs/jquery-1.9.1.js"></script>
     <script src="js/libs/handlebars-1.0.0-rc.4.js"></script>

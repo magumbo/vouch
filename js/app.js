@@ -17,12 +17,19 @@ App.sessionModel = Ember.Object.extend({
 	password:null
 });
 
+App.userModel = Ember.Object.extend({
+	serverResponse:null,
+	userId:null,
+	currentUserId:null,
+	username:null,
+	password:null,
+	userQuery:null,
+	returnedUserData:null
+});
+
 
 //Object created by prototype for user view
-var sR = App.serverResponse.create({
-  message: null,
-  userJSON: null
-});
+var userData = App.userModel.create({});
 
 //Object created by prototype for login view
 var loginData = App.sessionModel.create({});
@@ -36,7 +43,7 @@ App.IndexRoute = Ember.Route.extend({
 
 //Route code for user view
 App.UserRoute = Ember.Route.extend({
-  model: function(){ return sR;}
+  model: function(){ return userData;}
 });
 
 //Route code for login page
@@ -44,74 +51,93 @@ App.LoginRoute = Ember.Route.extend({
   model: function(){ return loginData;}
 });
 
-//???
-App.Item = Ember.Object.extend();
-
-//Test function shows how to add methods onto an already defined route with "reopen"
-function updateUser(test){
-  App.UserRoute.reopen({
-    model: function() {
-      return ['test4','test5'];
-    }
-  });
-}
+/******************
+ *     User View    *
+ *******************/
+	
+App.userCollectionController = Ember.ArrayController.create();
 
 //Controller has methods that are executed on user view
-App.UserController = Ember.ObjectController.extend({	
-	  getUsers: function(evt) {
+App.UserController = Ember.ObjectController.extend({
+  get: function(evt) {
 	$.ajax({
 		  type: "GET",
-		  url: '/api/v0/users',
-	//	  data: data,
-		  success: function(data){sR.set('message', data)},
-		  error: function(test, fail){alert(JSON.stringify(fail));}
-		 // dataType: 'json'
+		  url: '/api/v0/users', 
+		  data: userData.userQuery,
+		  success: function(data){
+			userData.set('serverResponse', data.message);
+			App.userCollectionController.set('content', data.docs);
+		  },
+		  error: function(e){userData.set('serverResponse', JSON.parse(e.responseText).message);}
 		});
-  }	,
+  },	
+  
+ getSingle: function(evt) {
+	$.ajax({
+		  type: "GET",
+		  url: '/api/v0/users/' + userData.userId, 
+		  data: userData.userQuery,
+		  success: function(data){
+			console.log(data);
+			userData.set('serverResponse', data.message);
+			userData.set('returnedUserData', JSON.stringify(data.user));
+		  },
+		  //error: function(e){userData.set('serverResponse', JSON.parse(e.responseText).message);}
+		  error: function(e){console.log(e);},
+		  dataType: 'json'
+		});
+  },	  
+	
+	
+	
+	
+	
+	
+  /*
+   * 
+   * NOTE: This method uses the session resource, not the uesr resource in the URL
+   * 
+   */
+   getCurrentUserId: function(evt) {
+	$.ajax({
+		  type: "GET",
+		  url: '/api/v0/session', 
+		  success: function(data){
+			userData.set('currentUserId', data.userID);
+			userData.set('userId', data.userId);
+			userData.set('serverResponse', 'current user is:' + data.userId);
+		  },
+		  error: function(e){userData.set('serverResponse', JSON.parse(e.responseText).message);},
+		  dataType: 'json'
+		});
+  },	
+
   postUsers: function(evt) {
-      var dataP = {"payload" : JSON.parse(sR.userJSON)};
 		$.ajax({
 			  type: "POST",
 			  url: '/api/v0/users',
-			  data: dataP,
-			  success: function(data){sR.set('message', data);},
-			  error: function(test, fail){alert(JSON.stringify(fail));}
-			  //dataType: 'json'
+			  data: {username : userData.username, password: userData.password},
+			  success: function(data){
+				  userData.set('serverResponse', data.message);
+				  userData.set('userQuery', '_id=' + data.userId);
+				  userData.set('userId', data.userId);
+			  },
+			  error: function(e){userData.set('serverResponse', JSON.parse(e.responseText).message);},
+			  dataType: 'json'
 	    });
-	  },
-  
-  putUsers: function(evt) {
-		$.ajax({
-			  type: "PUT",
-			  url: '/api/v0/users',
-		//	  data: data,
-			  success: function(data){sR.set('message', data);},
-			  error: function(test, fail){alert(JSON.stringify(fail));}
-			 // dataType: 'json'
-			});
-	  },
-  delUsers: function(evt) {
-		$.ajax({
-		  type: "DELETE",
-		  url: '/api/v0/users',
-	//	  data: data,
-		  success: function(data){sR.set('message', data);},
-		  error: function(test, fail){alert(JSON.stringify(fail));}
-		 // dataType: 'json'
-		});
 	  }
-
 });
 
-//Controller has methods that are executed on login view
+/******************
+ *     Login View    *
+ *******************/
 App.LoginController = Ember.ObjectController.extend({	
-
 	  get: function(evt) {
 	$.ajax({
 		  type: "GET",
 		  url: '/api/v0/session',
 		  success: function(data){loginData.set('serverResponse', data.message)},
-		  error: function(test, fail){alert(JSON.stringify(fail));}
+		  error: function(e){loginData.set('serverResponse', JSON.parse(e.responseText).message);}
 		 // dataType: 'json'
 		});
   }	,
@@ -124,7 +150,7 @@ App.LoginController = Ember.ObjectController.extend({
 			  success: function(data){loginData.set('serverResponse', data.message);},
 			 // success: function(data){console.log(data);},
 			  
-			  error: function(data){loginData.set('serverResponse', JSON.parse(data.responseText).message);},
+			  error: function(e){loginData.set('serverResponse', JSON.parse(e.responseText).message);},
 			  dataType: 'json'
 			});
 	 // loginData.set('serverResponse', JSON.stringify({username:loginData.username, password: loginData.password}));
