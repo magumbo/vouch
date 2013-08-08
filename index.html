@@ -33,6 +33,10 @@
 <p><b>Status: </b>{{model.serverResponse}}</p>
 <h2>Actions</h2>
 <hr>
+<p>
+<button {{action 'getCurrentUserId'}}>Get current user id</button>
+Note this function uses the session resource, not the user resource</p>
+<hr>
 <h2>Get json for user</h2>
 {{view Ember.TextField valueBinding="model.userId"}}
 <br>
@@ -40,14 +44,7 @@
 <br>
 {{model.returnedUserData}}
 <hr>
-<button {{action 'getCurrentUserId'}}>Get current user id</button>
-<p>Note this function uses the session resource, not the user resource</p>
-<hr>
 <h3>Create a user</h3>
-<ul>
-<li>username:{{model.username}}</li>
-<li>password:{{model.password}}</li>
-</ul>
 <ul>
 <li>{{view Ember.TextField valueBinding="model.username"}}</li>
 <li>{{view Ember.TextField valueBinding="model.password"}}</li>
