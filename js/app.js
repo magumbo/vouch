@@ -7,6 +7,7 @@ App.Router.map(function() {
 	 this.route("about", { path: "/about" });
 	 this.route("user", { path: "/user" });
 	 this.route("login", { path: "/login" });
+	 this.route("edit", { path: "/edit" });
 });
 
 //Prototype data object, used in place of ember data
