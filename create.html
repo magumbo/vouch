@@ -1,0 +1,56 @@
+<html>
+  <head>
+    <meta http-equiv="Content-type" content="text/html;charset=UTF-8">
+	
+	<link href="css/dropzone.css" rel="stylesheet"> 
+	
+    <script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jquery/1.9.0/jquery.min.js"></script>
+	<script type="text/javascript" src="js/dropzone.js"></script>
+	<script type="text/javascript" src="js/upload.js"></script>
+    <script type="text/javascript" src="https://apis.google.com/js/client.js?onload=handleClientLoad"></script>
+  
+  
+  <script>
+  
+	// or disable for specific dropzone:
+	// Dropzone.options.myDropzone = false;
+
+	Dropzone.autoDiscover = false;
+	
+	$(function() {
+	  // Now that the DOM is fully loaded, create the dropzone, and setup the 
+	  // event listeners
+
+	  var myDropzone = new Dropzone("#demo-upload");
+
+	  Dropzone.autoProcessQueue = false;
+
+  
+		myDropzone.autoProcessQueue = false;
+	  
+	  myDropzone.on("addedfile", function(file) {
+		/* Maybe display some more file information on your page */
+		//console.log('alert');
+		uploadFile(file);
+	  });
+
+	})
+  
+  </script>
+  
+  </head>
+  <body>
+    <!--Add a file picker for the user to start the upload process -->
+	
+    <input type="button" id="authorizeButton" style="display: none" value="Authorize" />
+
+	<div id="dropzone">
+		<div class="dropzone dz-clickable" id="demo-upload" action="/">
+			<input type="file" id="filePicker" style="display: none" />
+			<div class="dz-default dz-message"><span>Drop files here to upload</span></div>
+		</div>
+	</div>
+	<a id="html" href="" />HTML</a>
+	
+  </body>
+</html>

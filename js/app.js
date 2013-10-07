@@ -8,6 +8,7 @@ App.Router.map(function() {
 	 this.route("user", { path: "/user" });
 	 this.route("login", { path: "/login" });
 	 this.route("edit", { path: "/edit" });
+	 this.route("vote", { path: "/vote" });
 });
 
 //Prototype data object, used in place of ember data
@@ -28,6 +29,41 @@ App.userModel = Ember.Object.extend({
 	returnedUserData:null
 });
 
+
+	var incomingTextA = "l; whenever I find myself involuntarily pausing before coffin warehouses, and bringing up the rear of every funeral I meet; and especially whenever my hypos get such an upper hand of me, that it requires a super strong moral principle to prevent me from deliberately stepping into the street, and methodically knocking people's hats off- then, I account it high time to get to sea as soon as I can. This is my";
+		var incomingTextB = "l; whenever I find myself involuntarily pausing before coffin warehouses, and bringing up the rear of every funeral I meet; and especially whenever my hypos get such an upper hand of me, that it requires a super strong moral principle to prevent me from deliberately stepping onto the street, and methodically knocking people's hats off- and, I account it high time to get to sea as soon as I can. This is my";
+		
+		
+		
+		var dmp = new diff_match_patch();
+
+		function launch() {
+		  var text1 = incomingTextA;
+		  var text2 = incomingTextB;
+		  
+		   console.log(text1);
+		  console.log(text2);
+		  
+		  
+		  dmp.Diff_Timeout = parseFloat(0);
+		  dmp.Diff_EditCost = parseFloat(4);
+
+		  var ms_start = (new Date()).getTime();
+		  var d = dmp.diff_main(text1, text2);
+		  var ms_end = (new Date()).getTime();
+
+		  dmp.diff_cleanupSemantic(d);
+		 
+		  var ds = dmp.diff_prettyHtml(d);
+		  //document.getElementById('outputdiv').innerHTML = ds + '<BR>Time: ' + (ms_end - ms_start) / 1000 + 's';
+		  
+		 console.log(ds);
+		  
+		  $('#voteA').text(incomingTextA);
+		  $('#voteB').html(ds);
+		  
+		}
+		launch();
 
 //Object created by prototype for user view
 var userData = App.userModel.create({});
