@@ -7459,6 +7459,86 @@ h6 {
    text-shadow: 0 0 9px rgba(0,0,0,0.5);
 }
 
+.choice, .tick{
+position: relative;
+}
+
+.tick{
+width: 200px;
+height: 200px;
+display: block;
+border-radius: 100px;
+margin: 0 auto;
+border: 1px solid whitesmoke;
+font-size: 8em;
+color: white;
+text-align: center;
+line-height: 200px;
+top:0;
+opacity: 0;
+}
+
+.choice{
+
+cursor: pointer;
+}
+
+.choice .conent{
+margin: 0%;
+padding:0%;
+border: none;
+}
+
+.choice:hover .content{
+padding: 5%;
+margin: -5%;
+border: 1px solid whitesmoke;
+-webkit-transition: all 0.2s ease-in-out;
+transition: all 0.2s ease-in-out;
+
+}
+
+.choice:hover .tick{
+
+  -webkit-animation: rollup .4s linear forwards;
+     -moz-animation: rollup .4s linear forwards;
+      -ms-animation: rollup .4s linear forwards;
+       -o-animation: rollup .4s linear forwards;
+          animation: rollup .4s linear forwards;
+		  
+		  /*
+	top: -260px; opacity: 1;	  
+	-webkit-transition: 0.2s ease-in-out;
+          transition: rollup .4s linear forwards;	  
+		*/  
+		  
+}
+
+@-webkit-keyframes rollup{
+	0%	{	top: 0px; opacity: 0;}
+	90%	{	top: -275px; opacity: 1;}
+	100%{	top: -260px; opacity: 1;}
+}
+
+
+.green{
+background: #398235; /* Old browsers */
+background: -moz-radial-gradient(center, ellipse cover,  #398235 0%, #8ab66b 77%, #8ab66b 87%, #8ab66b 96%, #c9de96 100%); /* FF3.6+ */
+background: -webkit-gradient(radial, center center, 0px, center center, 100%, color-stop(0%,#398235), color-stop(77%,#8ab66b), color-stop(87%,#8ab66b), color-stop(96%,#8ab66b), color-stop(100%,#c9de96)); /* Chrome,Safari4+ */
+background: -webkit-radial-gradient(center, ellipse cover,  #398235 0%,#8ab66b 77%,#8ab66b 87%,#8ab66b 96%,#c9de96 100%); /* Chrome10+,Safari5.1+ */
+background: -o-radial-gradient(center, ellipse cover,  #398235 0%,#8ab66b 77%,#8ab66b 87%,#8ab66b 96%,#c9de96 100%); /* Opera 12+ */
+background: -ms-radial-gradient(center, ellipse cover,  #398235 0%,#8ab66b 77%,#8ab66b 87%,#8ab66b 96%,#c9de96 100%); /* IE10+ */
+background: radial-gradient(ellipse at center,  #398235 0%,#8ab66b 77%,#8ab66b 87%,#8ab66b 96%,#c9de96 100%); /* W3C */
+filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#398235', endColorstr='#c9de96',GradientType=1 ); /* IE6-9 fallback on horizontal gradient */
+}
+
+
+
+
+
+
+
+
 /*
 .fadein span:nth-of-type(1)  { color: rgba(0,0,0,0.1);}
 .fadein span:nth-of-type(2)  { color: rgba(0,0,0,0.2);}
